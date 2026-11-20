@@ -1,24 +1,23 @@
 # Why there is no front end
 
-nShift Audit is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+Freight audit is a comparison of three lists: what the carrier agreed to charge, what you sent, and what the carrier billed. Those lists are ordinary records. Most of what an audit subscription adds is the screen on top: an invoice explorer, filters, a dashboard of savings.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+That screen used to matter because asking a database a question was hard. It is not hard now. Open this folder in Claude Code, ask "which carrier billed tailgates we never asked for this quarter?", and it runs the query and shows the answer. Ask a question the dashboard never had a chart for and you still get an answer.
 
 ## What you gain
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
+- **Questions of your own.** Cost per kilo by lane, surcharges by customer, unbilled freight by cost centre: any join across rates, consignments and invoices.
+- **Your records, your database.** Rate cards, findings and disputes stay with you when you change carriers or providers.
+- **Rules that match your contracts.** Tolerances, dispute windows and surcharge rules are settings and plain SQL, changed with `/customise`.
+- **No per-invoice fee.** The bill does not grow with your freight volume.
 
-## What you give up
+## What a screen gives that this does not
 
-- **A visual board.** Stages are a table you ask about, not cards you drag.
+- **Reading scanned or PDF invoices on arrival.** This reads CSV and Excel saved as CSV.
+- **A shared screen for a large accounts team** to click through exceptions together. Here a person asks Claude Code, or opens the read-only pages from `npm run view`.
 - **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
+- **Carrier connections.** Invoices and consignments arrive as files, not live feeds.
 
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep nShift Audit. If you need the answers more than the screens, this is cheaper, faster and yours.
+Enterprise DNA builds any of these into your own version when you need them.
 
 Installed and run for you: https://enterprisedna.co/omni/instead-of/nshift-audit

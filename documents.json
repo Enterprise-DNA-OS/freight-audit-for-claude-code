@@ -1,11 +1,23 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "carrier-claim",
+    "title": "Freight invoice credit request",
+    "for_each": "select id, code from disputes where status in ('open', 'part_credited') order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      { "title": "Request", "layout": "record", "sql": "select d.code as our_reference, c.name as carrier, c.account_no as account, i.invoice_no as invoice, i.invoice_date, d.raised_on as raised, i.currency, d.claimed_cents as credit_requested_cents, d.credited_cents as credited_so_far_cents from disputes d join carriers c on c.id = d.carrier_id join invoices i on i.id = d.invoice_id where d.id = $1" },
+      { "title": "Lines that do not match the agreed rates", "sql": "select coalesce(l.connote, 'invoice') as connote, f.detail as reason, i.currency, f.billed_cents, f.expected_cents as agreed_cents, f.variance_cents as difference_cents from findings f join invoices i on i.id = f.invoice_id left join invoice_lines l on l.id = f.invoice_line_id where f.dispute_id = $1 order by l.line_no", "note": "Agreed amounts come from the rate card, fuel levy and surcharge schedule in force on the ship date. Please issue a credit note quoting our reference." }
+    ]
+  },
+  {
+    "name": "invoice-audit",
+    "title": "Freight invoice audit report",
+    "for_each": "select id, invoice_no from invoices where audited_at is not null order by invoice_date",
+    "file": "invoice_no",
+    "sections": [
+      { "title": "Invoice", "layout": "record", "sql": "select a.invoice_no as invoice, a.carrier, a.invoice_date, a.due_date, a.status, a.currency, a.billed_cents, a.expected_cents, a.variance_cents from invoice_audit a where a.id = $1" },
+      { "title": "Lines checked", "sql": "select l.line_no as line, l.connote, l.kind, l.charge_code as code, i.currency, l.amount_cents as billed_cents, l.expected_cents from invoice_lines l join invoices i on i.id = l.invoice_id where l.invoice_id = $1 order by l.line_no" },
+      { "title": "Findings and decisions", "sql": "select f.rule as check_failed, f.detail, i.currency, f.variance_cents, f.decision, coalesce(f.decided_by, '') as decided_by from findings f join invoices i on i.id = f.invoice_id where f.invoice_id = $1 order by f.rule", "note": "Prepared for approval. Approving records a decision here; nothing is paid from this system." }
     ]
   }
 ]

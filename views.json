@@ -1,14 +1,32 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Freight Audit for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Freight audit: this week",
+    "subtitle": "What needs a person, and the money waiting on a decision",
     "sections": [
-      {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
-      }
+      { "title": "Needs attention", "sql": "select item, what, why, due from attention order by due, item" },
+      { "title": "Open findings", "sql": "select invoice_no as invoice, carrier, connote, rule as check_failed, currency, variance_cents, dispute_by from open_findings order by dispute_by, variance_cents desc", "note": "Positive amounts were billed above the agreed rate. Accept, waive or dispute each one before the dispute window closes." },
+      { "title": "Disputes waiting on a carrier", "sql": "select code as dispute, carrier, invoice_no as invoice, raised_on, days_open, currency, claimed_cents, credited_cents, outstanding_cents from dispute_aging where status in ('open', 'part_credited') order by raised_on" }
+    ]
+  },
+  {
+    "name": "carriers",
+    "title": "Carrier scorecard",
+    "subtitle": "Who bills what was agreed, and who does not",
+    "sections": [
+      { "title": "Billing accuracy by carrier", "sql": "select carrier, name, invoices, lines, lines_with_findings, error_rate_pct as error_rate_percent, currency, overbilled_cents, credited_cents from carrier_scorecard order by overbilled_cents desc" },
+      { "title": "Surcharges billed", "sql": "select c.code as carrier, l.charge_code as surcharge, count(*)::int as times_billed, i.currency, sum(l.amount_cents)::bigint as billed_cents, count(f.id)::int as challenged from invoice_lines l join invoices i on i.id = l.invoice_id join carriers c on c.id = i.carrier_id left join findings f on f.invoice_line_id = l.id where l.kind = 'surcharge' group by c.code, l.charge_code, i.currency order by billed_cents desc" },
+      { "title": "Rate cards", "sql": "select code as rate_card, carrier, service, valid_from, valid_to, days_left, lanes from rate_card_expiry order by valid_to" }
+    ]
+  },
+  {
+    "name": "month-end",
+    "title": "Freight month end",
+    "subtitle": "The accrual for freight shipped but not billed, and cost by cost centre",
+    "sections": [
+      { "title": "Accrual by cost centre", "sql": "select cost_centre, currency, count(*)::int as consignments, sum(estimate_cents)::bigint as accrual_cents from unbilled group by cost_centre, currency order by cost_centre", "note": "Estimated from the agreed rate cards: freight, fuel levy and requested surcharges." },
+      { "title": "Shipped, not billed", "sql": "select connote, carrier, ship_date, cost_centre, currency, estimate_cents, days_since_shipped from unbilled order by ship_date" },
+      { "title": "Billed freight by cost centre", "sql": "select month, cost_centre, carrier, currency, consignments, billed_cents from cost_allocation order by month desc, cost_centre, carrier" }
     ]
   }
 ]

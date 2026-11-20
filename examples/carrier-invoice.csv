@@ -1,0 +1,6 @@
+invoice_no,invoice_date,due_date,tax_number,connote,kind,charge_code,description,billed_kg,origin_postcode,dest_postcode,amount,gst
+RL-INV-6001,2026-11-12,2026-12-02,123-456-789,RL2001,freight,,Road freight,120,2104,6011,65.40,
+RL-INV-6001,2026-11-12,2026-12-02,123-456-789,RL2001,fuel,FUEL,Fuel levy,,,,12.10,
+RL-INV-6001,2026-11-12,2026-12-02,123-456-789,RL2002,freight,,Road freight,125,2104,8011,86.75,
+RL-INV-6001,2026-11-12,2026-12-02,123-456-789,RL2002,surcharge,TAILGATE,Tailgate delivery,,,,45.00,
+RL-INV-6001,2026-11-12,2026-12-02,123-456-789,RL2002,surcharge,ADMIN,Account admin fee,,,,9.50,32.81

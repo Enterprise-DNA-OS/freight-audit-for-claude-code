@@ -1,0 +1,5 @@
+origin_zone,dest_zone,basic,per_kg,min
+AKL,WLG,15.50,0.43,36.00
+AKL,CHC,18.50,0.56,41.00
+AKL,HAM,9.20,0.19,22.50
+WLG,AKL,15.50,0.43,36.00

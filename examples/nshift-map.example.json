@@ -1,0 +1,11 @@
+{
+  "_": "Example only. Replace each right-hand name with the column heading in your own Invoice Explorer export, then run: npm run freight -- import nshift <file.csv> --carrier=CODE --map=<this file> --dry-run",
+  "invoice_no": "Invoice number",
+  "invoice_date": "Invoice date",
+  "connote": "Shipment number",
+  "kind": "Charge type",
+  "charge_code": "Charge code",
+  "description": "Charge description",
+  "billed_kg": "Weight",
+  "amount": "Amount"
+}
